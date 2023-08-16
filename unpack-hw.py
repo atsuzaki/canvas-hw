@@ -1,7 +1,7 @@
 # Unpack Canvas HW for grading.
 # Bart Massey 2023
 
-import argparse, csv, re, subprocess, sys, zipfile
+import argparse, re, json, subprocess, sys, zipfile
 from pathlib import Path
 
 parser = argparse.ArgumentParser(
@@ -24,10 +24,11 @@ sdest = mkfdir("staged")
 gdest = mkfdir("graded")
 
 student_names = dict()
-with open("students.csv", "r") as s:
-    s = csv.reader(s)
-    for name, student_id in s:
-        student_names[student_id] = name
+with open("students.json", "r") as s:
+    s = json.load(s)
+    for record in s:
+        student_id = record["id"]
+        student_names[student_id] = record["short_name"]
 
 filename_re = re.compile(r"([a-z]+)_(LATE_)?([0-9]+)_([0-9]+).*$")
 project_archive = zipfile.ZipFile(args.filename)
