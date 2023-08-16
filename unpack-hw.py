@@ -27,7 +27,7 @@ student_names = dict()
 with open("students.json", "r") as s:
     s = json.load(s)
     for record in s:
-        student_id = record["id"]
+        student_id = str(record["id"])
         student_names[student_id] = record["short_name"]
 
 filename_re = re.compile(r"([a-z]+)_(LATE_)?([0-9]+)_([0-9]+).*$")
