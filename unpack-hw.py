@@ -15,7 +15,7 @@ args = parser.parse_args()
 def mkfdir(root):
     fdest = Path(root)
     if fdest.is_dir():
-        print(f"directory {root} exists", file=stderr)
+        print(f"directory {root} exists", file=sys.stderr)
         exit(1)
     fdest.mkdir(mode=0o700)
     return fdest
@@ -30,22 +30,31 @@ with open("students.json", "r") as s:
         student_id = str(record["id"])
         student_names[student_id] = record["short_name"]
 
-filename_re = re.compile(r"([a-z]+)_(LATE_)?([0-9]+)_([0-9]+).*$")
+filename_re = re.compile(r"([a-z]+)_(LATE_)?([0-9]+)_.*$")
 project_archive = zipfile.ZipFile(args.filename)
 projects = []
 for zipinfo in project_archive.infolist():
     fields = filename_re.search(zipinfo.filename)
     if fields is None:
-        print(f"warning: filename not parsed: {zipinfo.filename}", file=stderr)
+        print(f"warning: filename not parsed: {zipinfo.filename}", file=sys.stderr)
         continue
-    slug, student_id, asg_id = fields[1], fields[3], fields[4]
+    slug, student_id = fields[1], fields[3]
     name = student_names[student_id]
 
-    path = mkfdir(sdest / slug)
+    path = sdest / slug
+    had_dir = path.is_dir()
+    if not had_dir:
+        path.mkdir(mode=0o700)
+        
+    if Path(zipinfo.filename).suffix in ("ZIP", "zip"):
+        zip = project_archive.open(zipinfo)
+        with zipfile.ZipFile(zip) as zip:
+            zip.extractall(path=path)
+    else:
+        project_archive.extract(zipinfo, path=path)
 
-    zip = project_archive.open(zipinfo)
-    with zipfile.ZipFile(zip) as zip:
-        zip.extractall(path=path)
+    if had_dir:
+        continue
 
     grading = path / "GRADING.txt"
     with open(grading, "w") as gr:
@@ -54,6 +63,6 @@ for zipinfo in project_archive.infolist():
         print("-", file=gr)
         print(file=gr)
 
-    info = path / ".canvas_info"
+    info = path / ".student_id"
     with open(info, "w") as i:
-        print(f"{student_id},{asg_id}", file=i)
+        print(f"{student_id}", file=i)

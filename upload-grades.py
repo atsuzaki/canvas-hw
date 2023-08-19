@@ -17,9 +17,9 @@ grades = dict()
 comments = dict()
 projects = list(Path("graded").iterdir())
 for project in projects:
-    fids = project / ".canvas_info"
+    fids = project / ".student_id"
     with fids.open() as f:
-        sid, _ = f.read().strip().split(",")
+        sid = f.read().strip().split(",")
 
     fgrading = project / "GRADING.txt"
     with fgrading.open() as f:
