@@ -17,9 +17,9 @@ grades = dict()
 comments = dict()
 projects = list(Path("graded").iterdir())
 for project in projects:
-    fids = project / ".student_id"
+    fids = project / ".ids"
     with fids.open() as f:
-        sid = f.read().strip().split(",")
+        sids = [line.strip().split("=")[1] for line in f.read().splitlines()]
 
     fgrading = project / "GRADING.txt"
     with fgrading.open() as f:
@@ -30,8 +30,9 @@ for project in projects:
     score = int(sgrading[2])
     assert sgrading[3] == "", f"bad GRADING: {fgrading}"
     body = "\n".join(sgrading[4:]) + "\n"
-    grades[sid] = score
-    comments[sid] = body
+    for s in sids:
+        grades[s] = score
+        comments[s] = body
 
 assert args.courseid and args.asgid, "need course and assignment ids"
 
