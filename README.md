@@ -23,7 +23,7 @@ Thus is SpeedGrader avoided.
 
 ### Download
 
-* Go to https://canvas.pdx.edu/<course-id>/students and
+* Go to https://canvas.pdx.edu/courses/<course-id>/students and
   copy-paste the JSON found there into `students.json`
   (gross, will fix later)
 
@@ -41,8 +41,11 @@ Thus is SpeedGrader avoided.
 
 ### Upload
 
-* Find course ID in course URL
-* Find assignment ID in assignment URL
+* Go to the assignment URL.  *Note:* there are things that
+  *look* like assignment IDs but aren't.  Go to the page of
+  the assignment itself.
+* Find course ID in assignment URL
+* Find assignment ID in assignment URL.
 * Run `upload-grades.py <courseid> <asgid>`
 
 ## Acknowledgments
