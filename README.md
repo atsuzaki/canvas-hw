@@ -23,7 +23,7 @@ Thus is SpeedGrader avoided.
 
 ### Download
 
-* Go to https://canvas.pdx.edu/<course-id>/students and
+* Go to `https://canvas.pdx.edu/courses/<course-id>/students` and
   copy-paste the JSON found there into `students.json`
   (gross, will fix later)
 
