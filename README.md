@@ -15,7 +15,7 @@ Thus is SpeedGrader avoided.
 
 * https://canvas.pdx.edu/profile/settings to generate Canvas
   API token
-* Store Canvas API token in ~/.canvastoken
+* Store Canvas API token in ~/.canvasgrader
 * Clone `canvasgrader` fork
   http://github.com/BartMassey-upstream/canvasgrader (for
   now) and run `pip install .`
